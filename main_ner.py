@@ -71,7 +71,7 @@ if __name__ == '__main__':
     parser.add_argument('--bert_path', type=str, default='/home/shibata/Desktop/BERT/UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K')
     parser.add_argument('--neologd_path', type=str, default='/usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')
     parser.add_argument('--manbyo_path', type=str, default="/home/shibata/Desktop/resource/MANBYO_201907_Dic-utf8.dic")
-    parser.add_argument('--data_path', type=str, default="../preprocess/brat2csv/data/csv/UTH_CR_conll_format_arbitrary_UTH.csv")
+    parser.add_argument('--data_path', type=str, default="./data/UTH_CR_conll_format_arbitrary_UTH.csv")
     parser.add_argument('--exp_name', type=str, default="UTH")
     parser.add_argument('--bert_type', type=str, default="UTH")
     
