@@ -85,6 +85,10 @@ if __name__ == '__main__':
 
     hyper = parser.parse_args()
 
+    # フォルダ作成
+    for SAMPLE_DIR in ["./logs", "./models/{0}/{1}/NER".format(hyper.task, hyper.bert_type), "./results/{0}/{1}/NER".format(hyper.task, hyper.bert_type)]:
+        if not os.path.exists(SAMPLE_DIR):
+            os.makedirs(SAMPLE_DIR)
 
     # ログの出力名を設定（1）
     logger = logging.getLogger('LoggingTest')
@@ -102,9 +106,4 @@ if __name__ == '__main__':
     sh.setFormatter(formatter)
 
     # hyper = Hyper(os.path.join('experiments',"{0}_NER_icorpus_full".format(bert_type) + '.json'))
-
-    # フォルダ作成
-    for SAMPLE_DIR in ["./models/{0}/{1}/NER".format(hyper.task, hyper.bert_type), "./results/{0}/{1}/NER".format(hyper.task, hyper.bert_type)]:
-        if not os.path.exists(SAMPLE_DIR):
-            os.makedirs(SAMPLE_DIR)
     main()
