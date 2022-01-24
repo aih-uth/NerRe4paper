@@ -1,0 +1,13 @@
+{
+    "bert_path": "/home/shibata/Desktop/BERT/NICT_BERT-base_JapaneseWikipedia_32K_BPE",
+    "neologd_path": "/usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd",
+    "manbyo_path": "/home/shibata/Desktop/resource/MANBYO_201907_Dic-utf8.dic",
+    "exp_name": "NICT",
+    "data_path": "../preprocess/data/csv/CR_conll_format_arbitrary_NICT_for_experiment.csv",
+    "max_words": 510,
+    "idx_flag": "F",
+    "batch_size": 1,
+    "max_epoch": 120,
+    "skip_epoch": 0,
+    "task": "Pipeline"
+}
