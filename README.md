@@ -34,7 +34,7 @@ Please run the following code in Google Colab.
 
 (Note that if you want to run an experiment with the same experimental setup as ours, you maight have to subscribe Colab Pro.)
 
-```
+```python
 import os
 ! git clone XXX
 ! wget https://ai-health.m.u-tokyo.ac.jp/labweb/dl/uth_bert/UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K_pytorch.zip
