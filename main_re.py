@@ -26,8 +26,6 @@ def main():
         X_train, X_val = train_val_split_doc(X_train)
         # トーカナイザー
         bert_tokenizer = load_tokenizer(hyper)
-        # 検証
-        X_train, X_val = train_val_split_doc(X_train)
         # ベクトル
         tag2idx, rel2idx = make_idx(pd.concat([X_train, X_val, X_test]), hyper)
         # 訓練ベクトルを作成
