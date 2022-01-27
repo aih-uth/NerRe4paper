@@ -45,15 +45,22 @@ os.chdir("./UTH-29")
 ! python main_re.py --bert_path ../UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K
 ```
 
+## Prefromance
+| Fold | NER | RE |
+|:---|---:|---:|
+|1 |0.01 |0.02 |
+|2 |0.01 |0.02 |
+|3 |0.01 |0.02 |
+|4 |0.01 |0.02 |
+|5 |0.01 |0.02 |
+|Avg. |0.01 |0.02 |
+
 
 ## References
-```
-[1] 篠原 恵美子， 河添 悦昌， 柴田 大作， 嶋本 公徳， 関 倫久. (2021). 医療テキストに対する網羅的な所見アノテーションのためのアノテーション基準の構築. 第25回日本医療情報学春季学術大会. (Japanese)
-[2] Kawazoe, Y., Shibata, D., Shinohara, E., Aramaki, E., & Ohe, K. (2021). A clinical specific BERT developed using a huge Japanese clinical text corpus. Plos one, 16(11), e0259763.
-[3] Ma, Y., Hiraoka, T., & Okazaki, N. (2020). Named Entity Recognition and Relation Extraction using Enhanced Table Filling by Contextualized Representations. arXiv preprint arXiv:2010.07522.
-[4] Ptroch CRF: https://pytorch-crf.readthedocs.io/en/stable/
-[5] Seqeval: https://github.com/chakki-works/seqeval
-```
+
+- Ma, Y., Hiraoka, T., & Okazaki, N. (2020). Named Entity Recognition and Relation Extraction using Enhanced Table Filling by Contextualized Representations. arXiv preprint arXiv:2010.07522.
+- Pytroch CRF: https://pytorch-crf.readthedocs.io/en/stable/
+- Seqeval: https://github.com/chakki-works/seqeval
 
 ## Citation
 
