@@ -15,8 +15,16 @@ def main():
     # 実験データ
     df = load_data_cv(hyper)
     df = df.rename(columns={'Unnamed: 0': 'serial'})
+    # チェック
+    unique_rels = []
+    for rels in df["rel_type"]:
+        if rels == "None":
+            pass
+        else:
+            unique_rels.extend(rels.split(","))
+    logger.info("関係の総数{0}".format(len(set(unique_rels))))
     # 系列長を設定
-    df = cut_length(df, hyper.max_words)
+    # df = cut_length(df, hyper.max_words)
     kf = GroupKFold(n_splits=5)
     for fold, (train_index, test_index) in enumerate(kf.split(df, df, df["name"])):
         logger.info("----------{0}-foldの実験を開始----------".format(fold))

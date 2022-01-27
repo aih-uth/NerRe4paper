@@ -14,8 +14,11 @@ def main():
     logger.info("----------{0}の実験を開始----------".format(hyper.exp_name))
     # 実験データ
     df = load_data_cv(hyper)
+    # チェック
+    unique_ents = set([x[2:] for x in df["IOB"] if x != "O"])
+    logger.info("固有表現の総数{0}".format(len(unique_ents)))
     # 系列長を設定
-    df = cut_length(df, hyper.max_words)
+    # df = cut_length(df, hyper.max_words)
     kf = GroupKFold(n_splits=5)
     for fold, (train_index, test_index) in enumerate(kf.split(df, df, df["name"])):
         logger.info("----------{0}-foldの実験を開始----------".format(fold))
