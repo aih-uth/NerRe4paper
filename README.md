@@ -59,8 +59,8 @@ CC BY-NC-SA 4.0
 
 ## References
 
-- Ma, Y., Hiraoka, T., & Okazaki, N. (2020). Named Entity Recognition and Relation Extraction using Enhanced Table Filling by Contextualized Representations. arXiv preprint arXiv:2010.07522. Software available from https://github.com/YoumiMa/TablERT
-- pytorch-crf. Software available from https://pytorch-crf.readthedocs.io/en/stable/
+- Ma, Y., Hiraoka, T., & Okazaki, N. (2020). Named Entity Recognition and Relation Extraction using Enhanced Table Filling by Contextualized Representations. arXiv preprint arXiv:2010.07522. Software available from https://github.com/YoumiMa/TablERT.
+- pytorch-crf. Software available from https://pytorch-crf.readthedocs.io/en/stable/.
 - Hiroki Nakayama. seqeval: A python framework for sequence labeling evaluation, 2018. Software available from https://github.com/chakki-works/seqeval.
 
 ## Citation
