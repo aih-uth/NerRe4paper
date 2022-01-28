@@ -31,8 +31,7 @@ python main_re.py --bert_path <UTH-BERT path>
 
 If you have a Google account, you are able to run our code in Google Colab.
 Please run the following code in Google Colab.
-
-(Note that if you want to run an experiment with the same experimental setup as ours, you maight have to subscribe Colab Pro.)
+Note that if you want to run an experiment with the same experimental setup as ours, you maight have to subscribe Colab Pro.
 
 ```python
 import os
@@ -46,7 +45,7 @@ os.chdir("./UTH-29")
 ```
 
 ## Prefromance
-| Fold | NER | RE |
+| Fold | NER |RE|
 |:---|---:|---:|
 |1 |0.01 |0.02 |
 |2 |0.01 |0.02 |
@@ -61,8 +60,8 @@ CC BY-NC-SA 4.0
 ## References
 
 - Ma, Y., Hiraoka, T., & Okazaki, N. (2020). Named Entity Recognition and Relation Extraction using Enhanced Table Filling by Contextualized Representations. arXiv preprint arXiv:2010.07522.
-- Pytroch CRF: https://pytorch-crf.readthedocs.io/en/stable/
-- Seqeval: https://github.com/chakki-works/seqeval
+- pytorch-crf. Software available from https://pytorch-crf.readthedocs.io/en/stable/
+- Hiroki Nakayama. seqeval: A python framework for sequence label-ing evaluation, 2018. Software available from https://github.com/chakki-works/seqeval.
 
 ## Citation
 
