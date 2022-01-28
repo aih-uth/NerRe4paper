@@ -55,6 +55,8 @@ os.chdir("./UTH-29")
 |5 |0.01 |0.02 |
 |Avg. |0.01 |0.02 |
 
+# License
+CC BY-NC-SA 4.0
 
 ## References
 
