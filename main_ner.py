@@ -14,11 +14,11 @@ def main():
     logger.info("----------{0}の実験を開始----------".format(hyper.exp_name))
     # 実験データ
     df = load_data_cv(hyper)
+
     # チェック
     unique_ents = set([x[2:] for x in df["IOB"] if x != "O"])
     logger.info("固有表現の総数{0}".format(len(unique_ents)))
-    # 系列長を設定
-    # df = cut_length(df, hyper.max_words)
+
     kf = GroupKFold(n_splits=5)
     for fold, (train_index, test_index) in enumerate(kf.split(df, df, df["name"])):
         logger.info("----------{0}-foldの実験を開始----------".format(fold))
@@ -29,7 +29,7 @@ def main():
         # トーカナイザー
         bert_tokenizer = load_tokenizer(hyper)
         # ベクトル
-        tag2idx, _ = make_idx(pd.concat([X_train, X_val, X_test]), hyper)
+        tag2idx, _ = make_idx(pd.concat([X_train, X_val, X_test]))
         # 訓練ベクトルを作成
         train_vecs, ner_train_labels = make_train_vecs(X_train, bert_tokenizer, tag2idx)
         # 検証
@@ -82,7 +82,6 @@ if __name__ == '__main__':
     parser.add_argument('--skip_epoch', type=int, default=0)
 
     parser.add_argument('--task', type=str, default='Pipeline')
-    parser.add_argument('--idx_flag', type=str, default='F')
 
     hyper = parser.parse_args()
 
@@ -105,6 +104,4 @@ if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s:%(lineno)d:%(levelname)s:%(message)s')
     fh.setFormatter(formatter)
     sh.setFormatter(formatter)
-
-    # hyper = Hyper(os.path.join('experiments',"{0}_NER_icorpus_full".format(bert_type) + '.json'))
     main()

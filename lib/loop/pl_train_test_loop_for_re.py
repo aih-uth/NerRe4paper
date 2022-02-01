@@ -9,7 +9,6 @@ import transformers
 
 
 def batch_processing(model, sentence, tag, batch_re, device):
-    # 1バッチごとに処理
     rel_logits = []
     for batch in range(0, len(sentence), 1):       
         rel_logit = model(sentence[batch].unsqueeze(0).to(device), 
@@ -23,7 +22,7 @@ def batch_processing(model, sentence, tag, batch_re, device):
 def train_val_loop_re(train_vecs, ner_train_labels, re_train_gold_labels, 
                       X_val, val_vecs, ner_val_labels, re_val_gold_labels, 
                       tag2idx, rel2idx, fold, hyper, device, logger):
-    # 以下で訓練るーぷ
+    # 訓練
     best_val_F =  -1e5
     # モデルを定義
     model = BERT_TF_REL(hyper, tag2idx, rel2idx, device).to(device)
@@ -33,16 +32,11 @@ def train_val_loop_re(train_vecs, ner_train_labels, re_train_gold_labels,
                             {'params': model.label_embedding.parameters(), 'lr': 1e-3, 'weight_decay': 0.01},
                             {'params': model.rel_classifier.parameters(), 'lr': 1e-3, 'weight_decay': 0.01}],
                             eps=1e-03)
-    # Total number of training steps is [number of batches] x [number of epochs]. 
-    # (Note that this is not the same as the number of training samples).
-    # num_warmup_steps = 0 -> Default value in run_glue.py
-    # https://www.pdfprof.com/PDF_Image.php?idt=76193&t=28 -> warmup_stepsは学習率を上げていくSTEP? グラフで言う右上がりの箇所
     warmup_steps = int(hyper.max_epoch * len(train_vecs) * 0.1 / hyper.batch_size)
     scheduler = transformers.get_linear_schedule_with_warmup(optimizer, 
                                                              num_warmup_steps=warmup_steps, 
                                                              num_training_steps=len(train_vecs)*hyper.max_epoch)
-
-    # 念の為; BERTの全レイヤーの勾配を更新
+    # BERTの全レイヤーの勾配を更新
     for _, param in model.named_parameters():
         param.requires_grad = True
     model = torch.nn.DataParallel(model)
@@ -84,7 +78,7 @@ def train_val_loop_re(train_vecs, ner_train_labels, re_train_gold_labels,
             scheduler.step()
             # 合計の損失
             re_running_loss += rel_loss.item()
-        # カキコ
+
         logger.info("訓練")
         logger.info("{0}エポック目のREの損失値: {1}\n".format(epoch, re_running_loss))
         # 検証

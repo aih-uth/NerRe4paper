@@ -15,6 +15,7 @@ def main():
     # 実験データ
     df = load_data_cv(hyper)
     df = df.rename(columns={'Unnamed: 0': 'serial'})
+
     # チェック
     unique_rels = []
     for rels in df["rel_type"]:
@@ -23,8 +24,7 @@ def main():
         else:
             unique_rels.extend(rels.split(","))
     logger.info("関係の総数{0}".format(len(set(unique_rels))))
-    # 系列長を設定
-    # df = cut_length(df, hyper.max_words)
+
     kf = GroupKFold(n_splits=5)
     for fold, (train_index, test_index) in enumerate(kf.split(df, df, df["name"])):
         logger.info("----------{0}-foldの実験を開始----------".format(fold))
@@ -35,7 +35,7 @@ def main():
         # トーカナイザー
         bert_tokenizer = load_tokenizer(hyper)
         # ベクトル
-        tag2idx, rel2idx = make_idx(pd.concat([X_train, X_val, X_test]), hyper)
+        tag2idx, rel2idx = make_idx(pd.concat([X_train, X_val, X_test]))
         # 訓練ベクトルを作成
         train_vecs, ner_train_labels = make_train_vecs(X_train, bert_tokenizer, tag2idx)
         # 検証
@@ -62,7 +62,7 @@ def main():
 if __name__ == '__main__':
     if torch.cuda.is_available():
         print('use cuda device')
-        seed=1478754
+        seed=42
         device = torch.device("cuda")
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
@@ -92,7 +92,6 @@ if __name__ == '__main__':
     parser.add_argument('--skip_epoch', type=int, default=0)
 
     parser.add_argument('--task', type=str, default='Pipeline')
-    parser.add_argument('--idx_flag', type=str, default='F')
 
     hyper = parser.parse_args()
 
@@ -111,9 +110,6 @@ if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s:%(lineno)d:%(levelname)s:%(message)s')
     fh.setFormatter(formatter)
     sh.setFormatter(formatter)
-
-    # hyper = Hyper(os.path.join('experiments',"{0}_RE_icorpus_full".format(bert_type) + '.json'))
-
     # フォルダ作成
     for SAMPLE_DIR in ["./models/{0}/{1}/RE".format(hyper.task, hyper.bert_type), "./results/{0}/{1}/RE".format(hyper.task, hyper.bert_type)]:
         if not os.path.exists(SAMPLE_DIR):

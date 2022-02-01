@@ -13,7 +13,7 @@ import transformers
 def train_val_loop_ner(train_vecs, ner_train_labels,
                        X_val, val_vecs, ner_val_labels, 
                        tag2idx, fold, hyper, device, logger):
-    # 以下で訓練るーぷ
+    # 訓練
     best_val_F =  -1e5
     # モデルを定義
     model = BERT_CRF(hyper, tag2idx).to(device)
@@ -23,16 +23,12 @@ def train_val_loop_ner(train_vecs, ner_train_labels,
                             {'params': model.linear.parameters(), 'lr': 1e-3, 'weight_decay': 0.01},
                             {'params': model.crf.parameters(), 'lr': 1e-3, 'weight_decay': 0.01}],
                             )
-    # Total number of training steps is [number of batches] x [number of epochs]. 
-    # (Note that this is not the same as the number of training samples).
-    # num_warmup_steps = 0 -> Default value in run_glue.py
-    # https://www.pdfprof.com/PDF_Image.php?idt=76193&t=28 -> warmup_stepsは学習率を上げていくSTEP? グラフで言う右上がりの箇所
     warmup_steps = int(hyper.max_epoch * len(train_vecs) * 0.1 / hyper.batch_size)
     # warmup_steps = 0
     scheduler = transformers.get_linear_schedule_with_warmup(optimizer, 
                                                              num_warmup_steps=warmup_steps, 
                                                              num_training_steps=len(train_vecs)*hyper.max_epoch)
-    # 念の為; BERTの全レイヤーの勾配を更新
+    # BERTの全レイヤーの勾配を更新
     for _, param in model.named_parameters():
         param.requires_grad = True
     model = torch.nn.DataParallel(model)
@@ -76,7 +72,6 @@ def train_val_loop_ner(train_vecs, ner_train_labels,
             # 合計の損失
             ner_running_loss += ner_loss.item()
             
-        # カキコ
         logger.info("訓練")
         logger.info("{0}エポック目のNERの損失値: {1}\n".format(epoch, ner_running_loss))
 

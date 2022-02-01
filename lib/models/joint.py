@@ -20,7 +20,7 @@ class BERT_TF_REL(nn.Module):
                                                  hidden_size + entity_label_embedding, 
                                                  att_hidden, device)
     def forward(self, sentence, tag):
-        input_mask = (sentence != 0)
+        input_mask = (sentence!=0)
         embed = self.bert_model(sentence, attention_mask=input_mask, token_type_ids=None)
         embed = embed["last_hidden_state"][:, 1: -1,:]
         embed = self.dropout(embed)
@@ -38,7 +38,7 @@ class BERT_CRF(nn.Module):
         self.linear = nn.Linear(768, len(tag2idx))
         self.crf = CRF(tag2idx, batch_first=True)
     def forward(self, sentence):
-        input_mask = (sentence != 0)
+        input_mask = (sentence!=0)
         embed = self.bert_model(sentence, attention_mask=input_mask, token_type_ids=None)
         embed = embed["last_hidden_state"][:, 1: -1,:]
         embed = self.dropout(embed)

@@ -67,39 +67,24 @@ def train_val_split_doc(X_train):
     return X_train, X_val
 
 
-def make_idx(df, hyper):
-    if hyper.idx_flag == "T":
-        # タグ
-        tag_vocab = list(sorted(set([x for x in df["IOB"]])))
-        tag2idx = {x: i + 2 for i, x in enumerate(tag_vocab)}
-        tag2idx["PAD"] = 0
-        tag2idx["UNK"] = 1
-        # 関係
-        rel_vocab = list(sorted(set([y for x in df["rel_type"] for y in x.split(",")])))
-        rel2idx = {x: i + 2 for i, x in enumerate(rel_vocab)}
-        rel2idx["PAD"] = 0
-        rel2idx["UNK"] = 1
-    else:
-        tag_vocab = list(sorted(set([x for x in df["IOB"]])))
-        tag2idx = {x: i + 1 for i, x in enumerate(tag_vocab)}
-        tag2idx["PAD"] = 0
-        # 関係
-        # rel_vocab = list(sorted(set([y for x in df["rel_type"] for y in x.split(",")])))
-        # rel2idx = {x: i + 1 for i, x in enumerate(rel_vocab)}
-        # rel2idx["PAD"] = 0
-        # 修正版rel2idx
-        rel_vocab = list(sorted(set([y for x in df["rel_type"] for y in x.split(",")])))
-        rel2idx = {}
-        last_value = 1
-        for _, x in enumerate(rel_vocab):
-            if x == "None":
-                pass
-            else:
-                rel2idx["R-" + x] = last_value
-                rel2idx["L-" + x] = last_value + 1
-                last_value +=2
-        rel2idx["PAD"] = 0
-        rel2idx["None"] = max(list(rel2idx.values())) + 1
+def make_idx(df):
+    # NER
+    tag_vocab = list(sorted(set([x for x in df["IOB"]])))
+    tag2idx = {x: i + 1 for i, x in enumerate(tag_vocab)}
+    tag2idx["PAD"] = 0
+    # RE
+    rel_vocab = list(sorted(set([y for x in df["rel_type"] for y in x.split(",")])))
+    rel2idx = {}
+    last_value = 1
+    for _, x in enumerate(rel_vocab):
+        if x == "None":
+            pass
+        else:
+            rel2idx["R-" + x] = last_value
+            rel2idx["L-" + x] = last_value + 1
+            last_value +=2
+    rel2idx["PAD"] = 0
+    rel2idx["None"] = max(list(rel2idx.values())) + 1
     return tag2idx, rel2idx
 
 
@@ -113,7 +98,6 @@ def make_train_vecs(df, tokenizer, tag2idx):
         ids = tokenizer.convert_tokens_to_ids(["[CLS]"] + list(tmp_df["word"]) + ["[SEP]"])
         # NER
         ner = [tag2idx[x] for x in list(tmp_df["IOB"])]
-        # REL
         # ADD
         vecs1.append(ids)
         vecs2.append(ner)
@@ -135,7 +119,6 @@ def make_test_vecs(df, tokenizer, tag2idx, exp_type):
             # ner = [tag2idx[x] if x in tag2idx else tag2idx["UNK"] for x in list(tmp_df["IOB"])]
         # else:
             # ner = [tag2idx[x] if x in tag2idx else tag2idx["UNK"] for x in list(tmp_df["pred_IOB"])]
-        # REL
         # ADD
         vecs1.append(ids)
         vecs2.append(ner)
@@ -182,36 +165,20 @@ def create_re_labels(df, rel2idx):
                 gold_tails.append(index2unnamed[int(tail)])
                 gold_unnamed.append(index)
 
-        # とりあえず方向は気にしない (ルールで与えられるやろ...)
         rel_label = torch.full((tmp_df.shape[0], tmp_df.shape[0]), rel2idx["None"])
 
         for rel, tail, index in zip(gold_rels, gold_tails, gold_unnamed):
             head_index = index
             tail_index = tail
             # 関係、スタート位置、終了位置
-            #print(rel, head_index, tail_index)
-            # 全indexを得る
             for i, idx in enumerate(ids):
                 if idx[0] == head_index:
                     all_head_index, head_index = idx, i
                 elif idx[0] == tail_index:
                     all_tail_index, tail_index = idx, i
-            # index
-            #print(all_head_index, all_tail_index)
-            # 固有表現
-            #print(seqs[head_index], seqs[tail_index])
-            #print()
             # 置換
             for h_i in all_head_index:
                 for t_i in all_tail_index:
-                    """
-                    if h_i > t_i:
-                        rel_label[t_i, h_i] = rel2idx[rel]
-                    elif t_i > h_i:
-                        rel_label[h_i, t_i] = rel2idx[rel]
-                    else:
-                        pass
-                    """
                     # h_i > t_iの場合: headとなる単語がtailとなる単語より右側にある = 矢印は右から左
                     # t_i > h_iの場合: headとなる単語がtailとなる単語より左側にある = 矢印は左から右
                     if h_i > t_i:
@@ -328,7 +295,6 @@ def result2df_for_re(X_test, re_preds, rel2idx, tag2idx):
         _, rel_logit = re_preds[batch].max(dim=1)
         rel_logit = torch.triu(rel_logit, diagonal=1).detach().cpu().numpy()[0].tolist()
         # 固有表現、タグ、serialを取得する
-        # tokens, labels, indexs = list(tmp_df["word"]), list(tmp_df["pred_IOB"]), list(tmp_df["serial"])
         tokens, labels, indexs = list(tmp_df["word"]), list(tmp_df["IOB"]), list(tmp_df["serial"])
         seqs, tags, ids = [], [], []
         for i in range(0, len(tokens), 1):
@@ -363,7 +329,7 @@ def result2df_for_re(X_test, re_preds, rel2idx, tag2idx):
         for i in range(0, tmp_df.shape[0], 1):
             # 各行の予測結果
             i_th_rel_logit = rel_logit[i]#.detach().cpu().numpy()
-            # Iタグは飛ばして良い (本当は良くないが、変換が難しいので -> 誤ってIタグから関係が出ている場合、これを見逃す)
+            # IタグはSKIP
             if i in inside_index: continue
             # 各行の各要素を確認
             for j in range(0, tmp_df.shape[0], 1):
