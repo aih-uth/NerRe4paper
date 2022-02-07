@@ -19,12 +19,12 @@ Download UTH-BERT [here](https://ai-health.m.u-tokyo.ac.jp/home/research/uth-ber
 
 To train and evaluate a NER model, run
 ```
-python main_ner.py --bert_path <UTH-BERT path>
+python main_ner.py [--bert_path UTH-BERT]
 ```
 
 To train and evaluate a RE model, run
 ```
-python main_re.py --bert_path <UTH-BERT path>
+python main_re.py [--bert_path UTH-BERT]
 ```
 
 ## Run in Google Colaboratory
