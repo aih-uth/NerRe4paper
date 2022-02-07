@@ -5,7 +5,7 @@ import torch
 import torch.utils.data
 from sklearn.model_selection import GroupKFold
 import logging
-from lib.util import load_data_cv, load_tokenizer, train_val_split_doc, make_idx, make_train_vecs, make_test_vecs, save_csv, save_ner_result, cut_length, train_val_split_doc
+from lib.util import load_data_cv, load_tokenizer, train_val_split_doc, make_idx, make_train_vecs, make_test_vecs, save_csv, save_ner_result, train_val_split_doc
 from lib.loop import train_val_loop_ner, test_loop_ner
 import argparse
 
@@ -14,7 +14,6 @@ def main():
     logger.info("----------{0}の実験を開始----------".format(hyper.exp_name))
     # 実験データ
     df = load_data_cv(hyper)
-
     # チェック
     unique_ents = set([x[2:] for x in df["IOB"] if x != "O"])
     logger.info("固有表現の総数{0}".format(len(unique_ents)))
@@ -65,20 +64,17 @@ if __name__ == '__main__':
         torch.manual_seed(999)
         np.random.seed(999)
 
-    
     # 引数
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--bert_path', type=str, default='/home/shibata/Desktop/BERT/UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K')
-    parser.add_argument('--neologd_path', type=str, default='/usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')
-    parser.add_argument('--manbyo_path', type=str, default="/home/shibata/Desktop/resource/MANBYO_201907_Dic-utf8.dic")
     parser.add_argument('--data_path', type=str, default="./data/UTH_CR_conll_format_arbitrary_UTH.csv")
     parser.add_argument('--exp_name', type=str, default="UTH")
     parser.add_argument('--bert_type', type=str, default="UTH")
     
     parser.add_argument('--max_words', type=int, default=510)
     parser.add_argument('--batch_size', type=int, default=32)
-    parser.add_argument('--max_epoch', type=int, default=120)
+    parser.add_argument('--max_epoch', type=int, default=50)
     parser.add_argument('--skip_epoch', type=int, default=0)
 
     parser.add_argument('--task', type=str, default='Pipeline')
