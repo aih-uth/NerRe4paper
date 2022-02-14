@@ -19,12 +19,12 @@ Download UTH-BERT [here](https://ai-health.m.u-tokyo.ac.jp/home/research/uth-ber
 
 To train and evaluate a NER model, run
 ```
-python main_ner.py [--bert_path UTH-BERT]
+python main_ner.py --bert_path UTH-BERT
 ```
 
 To train and evaluate a RE model, run
 ```
-python main_re.py [--bert_path UTH-BERT]
+python main_re.py --bert_path UTH-BERT
 ```
 
 ## Run in Google Colaboratory
@@ -47,12 +47,12 @@ os.chdir("./UTH-29")
 ## Prefromance
 | Fold | NER |RE|
 |:---|---:|---:|
-|1 |0.01 |0.02 |
-|2 |0.01 |0.02 |
-|3 |0.01 |0.02 |
-|4 |0.01 |0.02 |
-|5 |0.01 |0.02 |
-|Avg. |0.01 |0.02 |
+|1 |0.925 |0.845|
+|2 |0.925|0.836|
+|3 |0.914|0.841|
+|4 |0.914|0.843|
+|5 |0.925|0.849|
+|Avg. |0.921|0.843|
 
 # License
 CC BY-NC-SA 4.0
@@ -65,7 +65,7 @@ CC BY-NC-SA 4.0
 
 ## Citation
 
-If you use our code in your word, please cite the following paper:
+If you use our code in your work, please cite the following paper:
 ```
 Add Paper Info
 ```
