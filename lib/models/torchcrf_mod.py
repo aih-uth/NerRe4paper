@@ -70,7 +70,6 @@ class CRF(nn.Module):
         self.transitions = nn.Parameter(torch.empty(num_tags, num_tags))
         self.tag2idx = tag2idx
         self.reset_parameters()
-        # 2021/06/07 追加
         self.trans_weight_mod()
 
     def reset_parameters(self) -> None:
@@ -85,28 +84,19 @@ class CRF(nn.Module):
 
 
     def trans_weight_mod(self) -> None:
-        """あり得ないタグの遷移に対して莫大なコストを事前に与える処理
-        行から列への遷移確率を表で示す
-        """
         mod_tag2idx = {k: v for k, v in self.tag2idx.items() if k not in ["PAD", "UNK"]}
         for key, val in mod_tag2idx.items():
-            # B-で始まるタグ（B-●）からは、別の種類のI-で始まるタグ（I-▲）に遷移しない
             if key.startswith('B-'):
-                # I-*で始まるタグ
                 for key_i, val_i in mod_tag2idx.items():
                     if key_i.startswith("I-"):
                         if key.replace("B-", "") != key_i.replace("I-", ""):
                             self.transitions.data[val, val_i] = torch.tensor(-1e7, dtype=torch.float, requires_grad=True)
-            # I-で始まるタグ（I-●）からは、別の種類のI-で始まるタグ（I-▲）に遷移しない
             elif key.startswith('I-'):
-                # I-*で始まるタグ
                 for key_i, val_i in mod_tag2idx.items():
                     if key_i.startswith("I-"):
                         if key.replace("I-", "") != key_i.replace("I-", ""):
                             self.transitions.data[val, val_i] = torch.tensor(-1e7, dtype=torch.float, requires_grad=True)
-            # Oタグから、I-*で始まるタグには遷移しない
             elif key == 'O':
-                # I-*で始まるタグ
                 for key_i, val_i in mod_tag2idx.items():
                     if key_i.startswith("I"):
                         self.transitions.data[val, val_i] = torch.tensor(-1e7, dtype=torch.float, requires_grad=True)

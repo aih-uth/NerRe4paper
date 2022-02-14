@@ -15,11 +15,8 @@ def main():
     # Load Data
     df = load_data_cv(hyper)
     df = df.rename(columns={'Unnamed: 0': 'serial'})
-    # Preprocessing
-    # df = proc_df(df, ["agent", "denominator", "allergen_of", "not_value_of", "refered_m_site"])
     # 確認
     data_check(df)
-
     kf = GroupKFold(n_splits=5)
     for fold, (train_index, test_index) in enumerate(kf.split(df, df, df["name"])):
         logger.info("----------{0}-foldの実験を開始----------".format(fold))
@@ -95,7 +92,6 @@ def data_check(df):
     logger.info("----------")
 
 
-
 if __name__ == '__main__':
     if torch.cuda.is_available():
         print('use cuda device')
@@ -130,22 +126,18 @@ if __name__ == '__main__':
 
     hyper = parser.parse_args()
 
-    # ログの出力名を設定（1）
     logger = logging.getLogger('LoggingTest')
-    # ログレベルの設定（2）
     logger.setLevel(10)
-    # ログのコンソール出力の設定（3）
     sh = logging.StreamHandler()
     logger.addHandler(sh)
-    # ログのファイル出力先を設定（4）
     fh = logging.FileHandler('./logs/Pipeline_RE_{0}.log'.format(hyper.bert_type), "w")
     logger.addHandler(fh)
-    # ログの出力形式の設定
     formatter = logging.Formatter('%(asctime)s:%(lineno)d:%(levelname)s:%(message)s')
     fh.setFormatter(formatter)
     sh.setFormatter(formatter)
-    # フォルダ作成
+
     for SAMPLE_DIR in ["./models/{0}/{1}/RE".format(hyper.task, hyper.bert_type), "./results/{0}/{1}/RE".format(hyper.task, hyper.bert_type)]:
         if not os.path.exists(SAMPLE_DIR):
             os.makedirs(SAMPLE_DIR)
+            
     main()

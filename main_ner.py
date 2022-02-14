@@ -12,9 +12,9 @@ import argparse
 
 def main():
     logger.info("----------{0}の実験を開始----------".format(hyper.exp_name))
-    # 実験データ
+
     df = load_data_cv(hyper)
-    # チェック
+
     unique_ents = set([x[2:] for x in df["IOB"] if x != "O"])
     logger.info("固有表現の総数{0}".format(len(unique_ents)))
 
@@ -86,17 +86,12 @@ if __name__ == '__main__':
         if not os.path.exists(SAMPLE_DIR):
             os.makedirs(SAMPLE_DIR)
 
-    # ログの出力名を設定（1）
     logger = logging.getLogger('LoggingTest')
-    # ログレベルの設定（2）
     logger.setLevel(10)
-    # ログのコンソール出力の設定（3）
     sh = logging.StreamHandler()
     logger.addHandler(sh)
-    # ログのファイル出力先を設定（4）
     fh = logging.FileHandler('./logs/Pipeline_NER_{0}.log'.format(hyper.bert_type), "w")
     logger.addHandler(fh)
-    # ログの出力形式の設定
     formatter = logging.Formatter('%(asctime)s:%(lineno)d:%(levelname)s:%(message)s')
     fh.setFormatter(formatter)
     sh.setFormatter(formatter)
