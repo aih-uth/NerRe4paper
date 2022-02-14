@@ -35,7 +35,7 @@ Note that if you want to run an experiment with the same experimental setup as o
 
 ```python
 import os
-! git clone XXX
+! git clone https://github.com/aih-uth/UTH-29
 ! wget https://ai-health.m.u-tokyo.ac.jp/labweb/dl/uth_bert/UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K_pytorch.zip
 ! unzip UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K_pytorch.zip
 ! pip install transformers seqeval
