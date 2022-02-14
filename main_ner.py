@@ -50,7 +50,7 @@ def main():
 if __name__ == '__main__':
     if torch.cuda.is_available():
         print('use cuda device')
-        seed=1478754
+        seed=777
         device = torch.device("cuda")
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     
     parser.add_argument('--max_words', type=int, default=510)
     parser.add_argument('--batch_size', type=int, default=32)
-    parser.add_argument('--max_epoch', type=int, default=50)
+    parser.add_argument('--max_epoch', type=int, default=120)
     parser.add_argument('--skip_epoch', type=int, default=0)
 
     parser.add_argument('--task', type=str, default='Pipeline')

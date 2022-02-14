@@ -16,7 +16,7 @@ def main():
     df = load_data_cv(hyper)
     df = df.rename(columns={'Unnamed: 0': 'serial'})
     # Preprocessing
-    df = proc_df(df, ["agent", "denominator", "allergen_of", "not_value_of", "refered_m_site"])
+    # df = proc_df(df, ["agent", "denominator", "allergen_of", "not_value_of", "refered_m_site"])
     # 確認
     data_check(df)
 
@@ -54,6 +54,7 @@ def main():
         save_csv(res_df, hyper, fold, "RE")
 
 
+"""
 def proc_df(df, del_rels):
     list_types, list_tails = [], []
     for types, tails, serial in zip(df["rel_type"], df["rel_tail"], df["index"]):
@@ -77,6 +78,7 @@ def proc_df(df, del_rels):
     df["rel_type"] = list_types
     df["rel_tail"] = list_tails
     return df
+"""
 
 
 def data_check(df):
@@ -87,16 +89,17 @@ def data_check(df):
         else:
             unique_rels.extend(rels.split(","))
     logger.info("関係の総数: {0}".format(len(set(unique_rels))))
-    logger.info("使用する関係一覧")
+    logger.info("---------使用する関係一覧----------")
     for tag in set(sorted(unique_rels)):
         logger.info(tag)
+    logger.info("----------")
 
 
 
 if __name__ == '__main__':
     if torch.cuda.is_available():
         print('use cuda device')
-        seed=77
+        seed=777
         device = torch.device("cuda")
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
@@ -120,7 +123,7 @@ if __name__ == '__main__':
     
     parser.add_argument('--max_words', type=int, default=510)
     parser.add_argument('--batch_size', type=int, default=1)
-    parser.add_argument('--max_epoch', type=int, default=100)
+    parser.add_argument('--max_epoch', type=int, default=120)
     parser.add_argument('--skip_epoch', type=int, default=0)
 
     parser.add_argument('--task', type=str, default='Pipeline')
