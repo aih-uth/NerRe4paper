@@ -19,7 +19,7 @@ Download UTH-BERT [here](https://ai-health.m.u-tokyo.ac.jp/home/research/uth-ber
 
 To train and evaluate a NER model, run
 ```
-python main_ner.py --bert_path UTH-BERT
+python main_ner.py --bert_path UTH-BERT --batch_size 16
 ```
 
 To train and evaluate a RE model, run
@@ -40,7 +40,7 @@ import os
 ! unzip UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K_pytorch.zip
 ! pip install transformers seqeval
 os.chdir("./UTH-29")
-! python main_ner.py --bert_path ../UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K
+! python main_ner.py --bert_path ../UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K --batch_size 16
 ! python main_re.py --bert_path ../UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K
 ```
 
