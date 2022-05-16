@@ -68,13 +68,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--bert_path', type=str, default='/home/shibata/Desktop/BERT/UTH_BERT_BASE_512_MC_BPE_WWM_V25000_352K')
-    parser.add_argument('--data_path', type=str, default="./data/UTH_CR_conll_format_arbitrary_UTH.csv")
+    parser.add_argument('--data_path', type=str, default="./data/UTH_CR_conll_format_arbitrary_UTH_mod_0513.csv")
     parser.add_argument('--exp_name', type=str, default="UTH")
     parser.add_argument('--bert_type', type=str, default="UTH")
     
     parser.add_argument('--max_words', type=int, default=510)
     parser.add_argument('--batch_size', type=int, default=32)
-    parser.add_argument('--max_epoch', type=int, default=120)
+    parser.add_argument('--max_epoch', type=int, default=50)
     parser.add_argument('--skip_epoch', type=int, default=0)
 
     parser.add_argument('--task', type=str, default='Pipeline')

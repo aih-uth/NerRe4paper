@@ -35,7 +35,7 @@ def train_val_loop_re(train_vecs, ner_train_labels, re_train_gold_labels,
     warmup_steps = int(hyper.max_epoch * len(train_vecs) * 0.1 / hyper.batch_size)
     scheduler = transformers.get_linear_schedule_with_warmup(optimizer, 
                                                              num_warmup_steps=warmup_steps, 
-                                                             num_training_steps=len(train_vecs)*hyper.max_epoch)
+                                                             num_training_steps=len(train_vecs)/hyper.batch_size*hyper.max_epoch)
     # BERTの全レイヤーの勾配を更新
     for _, param in model.named_parameters():
         param.requires_grad = True
