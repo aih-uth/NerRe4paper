@@ -1,6 +1,6 @@
 # Development of comprehensive annotation criteria for patients’ states of clinical texts
 
-This is the experimental code for the paper Development of comprehensive annotation criteria for patients’ states of clinical texts.
+This is the experimental code for the paper [Development of comprehensive annotation criteria for patients’ states of clinical texts](https://www.sciencedirect.com/science/article/pii/S1532046422002052).
 
 ## Setpu
 ### Requirements
