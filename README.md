@@ -67,5 +67,5 @@ CC BY-NC-SA 4.0
 
 If you use our code in your work, please cite the following paper:
 ```
-Add Paper Info
+Emiko Shinohara, Daisaku Shibata, Yoshimasa Kawazoe. Development of comprehensive annotation criteria for patients’ states from clinical texts. J Biomed Inform. 2022 Sep; 104200 (in Press).
 ```
